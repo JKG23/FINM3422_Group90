@@ -1,11 +1,24 @@
+import requests
+import cairosvg
 from fpdf import FPDF
 
-# Create PDF
-pdf = FPDF()
-pdf.add_page()
+# Download SVG from HMC Capital's Website
+svg_url = "https://www.hmccapital.com.au/themes/bs5/images/HMC-Capital-logo.svg"
+response = requests.get(svg_url)
 
-# Add an image
-pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
+if response.status_code == 200:
+    with open("HMC_Capital_logo.svg", "wb") as f:
+        f.write(response.content)
 
-# Save the PDF
-pdf.output("output.pdf")
+    # Step 2: Convert SVG to PNG in order to add to the main PDF file
+    cairosvg.svg2png(url="HMC_Capital_logo.svg", write_to="HMC_Capital_logo.png")
+
+    # Step 3: Add to main PDF file
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.image("HMC_Capital_logo.png", x=10, y=10, w=75)
+    pdf.output("HMC_Report.pdf")
+
+    print("PDF created with converted SVG logo!")
+else:
+    print("Failed to download SVG logo.")
