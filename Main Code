@@ -3,11 +3,11 @@ from fpdf import FPDF
 from datetime import date
 import os
 
-# Set font
-pdf.set_font('Arial',
-
 # Create PDF
 pdf = FPDF(orientation='P', unit='mm', format='A4')
+
+# Set font
+pdf.set_font('Arial',)
 pdf.add_page()
 
 # Add a colored box behind the first three lines of text
@@ -131,18 +131,17 @@ for i, (index, row) in enumerate(df.iterrows()):
         pdf.cell(number_col_width, row_height, str(value), align='C')
     pdf.ln()
 
-# Define file path to save the PDF
-file_path = os.path.join(os.getcwd(), "equity_research_report.pdf")
-
-# Save the PDF
-pdf.output(file_path)
-
-print(f"PDF has been saved to {file_path}")
-# Set font
-pdf.set_font('Arial',
 
 # Add an image
 pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
+
+# Define file path to save the PDF
+file_path = os.path.join(os.getcwd(), "equity_research_report.pdf")
+
+print(f"PDF has been saved to {file_path}")
+
+# Save the PDF
+pdf.output(file_path)
 
 # Save the PDF
 pdf.output("output.pdf")
