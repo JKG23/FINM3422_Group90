@@ -3,10 +3,11 @@ from fpdf import FPDF
 from datetime import date
 import os
 
-# Create a PDF object
-pdf = FPDF(orientation='P', unit='mm', format='A4')
+# Set font
+pdf.set_font('Arial',
 
-# Add a page
+# Create PDF
+pdf = FPDF(orientation='P', unit='mm', format='A4')
 pdf.add_page()
 
 # Add a colored box behind the first three lines of text
@@ -137,3 +138,11 @@ file_path = os.path.join(os.getcwd(), "equity_research_report.pdf")
 pdf.output(file_path)
 
 print(f"PDF has been saved to {file_path}")
+# Set font
+pdf.set_font('Arial',
+
+# Add an image
+pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
+
+# Save the PDF
+pdf.output("output.pdf")
