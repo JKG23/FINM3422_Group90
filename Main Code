@@ -1,1 +1,12 @@
+import yfinance as yf
+from fpdf import FPDF
+
+# Create a PDF object
+pdf = FPDF(orientation='P', unit='mm', format='A4')
+
+# Add a page
+pdf.add_page()
+
+# Set font
+pdf.set_font('Arial', 'B', 11)
 
