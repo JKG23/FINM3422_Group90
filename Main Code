@@ -1,12 +1,18 @@
 import yfinance as yf
 from fpdf import FPDF
 
-# Create a PDF object
-pdf = FPDF(orientation='P', unit='mm', format='A4')
+# Set font
+pdf.set_font('Arial',
 
-# Add a page
+# Create PDF
+pdf = FPDF(orientation='P', unit='mm', format='A4')
 pdf.add_page()
 
 # Set font
-pdf.set_font('Arial', 'B', 11)
+pdf.set_font('Arial',
 
+# Add an image
+pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
+
+# Save the PDF
+pdf.output("output.pdf")
