@@ -1,5 +1,7 @@
-import yfinance as yf
+import pandas as pd
 from fpdf import FPDF
+from datetime import date
+import os
 
 # Create a PDF object
 pdf = FPDF(orientation='P', unit='mm', format='A4')
@@ -7,6 +9,131 @@ pdf = FPDF(orientation='P', unit='mm', format='A4')
 # Add a page
 pdf.add_page()
 
-# Set font
-pdf.set_font('Arial', 'B', 11)
+# Add a colored box behind the first three lines of text
+pdf.set_fill_color(202, 164, 94)  # Set fill color to hex #CAA45E
+pdf.rect(0, 0, 210, 45, 'F')  # Draw a filled rectangle (full page width, height to cover the first three lines)
 
+# Set font for date (subtitle style text) and change text color to white
+pdf.set_text_color(255, 255, 255)  # Set text color to white
+pdf.set_font('Arial', 'I', 9)  # Reduced font size for date
+pdf.cell(200, 10, date.today().strftime("%d %B %Y"), ln=True)  # Date at the top, left-aligned
+
+# Set font for title (big title style)
+pdf.set_font('Arial', 'B', 16)
+pdf.ln(2)  # Smaller line break between date and title
+pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)  # Title, left-aligned
+
+# Set font for authors (normal text)
+pdf.set_font('Arial', '', 9)  # Reduced font size for authors
+pdf.ln(2)  # Smaller line break between title and authors
+pdf.cell(200, 10, 'by Flynn Hubbard, Jay Gills, Kirrtanya Tandon and Joshua Gray', ln=True)  # Authors, left-aligned
+
+# Reset text color to black for subsequent sections
+pdf.set_text_color(0, 0, 0)
+
+# Add section title for "Company Overview"
+pdf.ln(6)  # Reduced line break between title and body
+pdf.set_font('Arial', 'B', 16)
+pdf.cell(200, 10, 'Company Overview', ln=True)
+
+# Set font for the body text (smaller size for compactness)
+pdf.set_font('Arial', '', 9)
+company_overview = """
+HMC Capital Limited (ASX: HMC) is a diversified Australian alternative asset manager specializing in high-conviction, scalable real asset strategies. Since its rebranding from Home Consortium in 2021, HMC has rapidly expanded its funds under management (FUM) and diversified its investment platforms across real estate, private equity, private credit, energy transition, and digital infrastructure.
+"""
+pdf.multi_cell(95, 5, company_overview)  # Width of 95 to keep the text from stretching across the whole page
+
+# Move to the right side of the page, inline with the "Company Overview" section
+pdf.set_xy(110, pdf.get_y() - 30)  # Adjust x and y coordinates to align with the "Company Overview" section
+
+# Set font for "Analyst Price Targets"
+pdf.set_font('Arial', 'B', 12)
+
+# Move "Analyst Price Targets" slightly higher
+pdf.set_xy(105, pdf.get_y() - 17)  # Adjust x and y coordinates for consistent margin
+pdf.set_text_color(202, 164, 94)  # Set text color to hex #CAA45E
+pdf.cell(95, 5, 'BUY', ln=True, align='R')  # Align right
+pdf.set_text_color(0, 0, 0)  # Reset text color to black
+
+# Set font for price targets (normal text)
+pdf.set_font('Arial', '', 9)
+price_targets = """
+Stock Code: ASX:HMC
+Price (as of 10/4/25): A$4.68
+Price Target: A$9.00
+Upside: 92.31%
+Dividend yield: 2.56%
+GICS Sector: Financials
+"""
+pdf.set_x(105)  # Adjust x coordinate for consistent margin
+pdf.multi_cell(95, 5, price_targets, align='R')  # Align text to the right
+
+# Add section title for "Industry Overview"
+pdf.ln(10)  # Reduced line break between sections
+pdf.set_font('Arial', 'B', 16)
+pdf.cell(200, 10, 'Industry Overview', ln=True)
+
+# Set font for the body text
+pdf.set_font('Arial', '', 9)
+industry_overview = """
+The alternative asset management industry has experienced significant growth in recent years, driven by increasing investor demand for diversification, higher returns, and protection against market volatility. This sector includes investments in real estate, private equity, infrastructure, and energy transition, all of which are seen as attractive due to their stable returns and long-term growth potential. Institutional investors, particularly pension funds and sovereign wealth funds, are shifting more capital towards alternatives as traditional asset classes offer lower yields. Furthermore, the rise of ESG investing is reshaping the industry, with asset managers integrating sustainability into their portfolios. Despite facing challenges such as market volatility and high competition, the alternative asset management industry remains robust, offering considerable opportunities for growth, particularly for firms with expertise in emerging sectors like digital infrastructure and renewable energy.
+"""
+pdf.multi_cell(0, 5, industry_overview)  # Adjusted line spacing
+
+# DCF Output Section (Referencing CSV)
+pdf.ln(10)  # Reduced line break between sections
+pdf.set_font('Arial', 'B', 12)
+pdf.cell(200, 10, 'DCF Output', ln=True)
+
+# Read the actual CSV file for DCF Output
+csv_file_path = "C:/Users/JKG66/OneDrive/4 FINM3422/Coding Assignment 1/DCF CSV.csv"  # Update the path to your actual CSV file
+df = pd.read_csv(csv_file_path)
+
+# Rename the first column to 'Item'
+df.rename(columns={'Unnamed: 0': 'Item'}, inplace=True)
+
+# Table format for DCF Output
+pdf.set_font('Arial', '', 9)
+
+# Table header
+headers = ['AUD$m'] + [f'{year}E' for year in range(2025, 2030)]
+pdf.ln(2)
+
+# Adjust column widths
+page_width = 200  # Total page width
+left_margin = 10  # Default left margin
+right_margin = 10  # Add a right margin equal to the left margin
+usable_width = page_width - left_margin - right_margin  # Usable width for the table
+item_col_width = 70  # Wider column for 'Item'
+number_col_width = (usable_width - item_col_width) / (len(headers) - 1)  # Distribute remaining width among number columns
+row_height = 4  # Reduced row height for compactness
+
+# Table header
+pdf.set_font('Arial', 'I', 9)  # Italic font for headers
+pdf.cell(item_col_width, row_height, headers[0], align='L')  # First heading with "AUD$m"
+pdf.set_font('Arial', 'B', 9)  # Bold font for the rest of the headers
+pdf.set_text_color(202, 164, 94)  # Set text color to hex #CAA45E
+for header in headers[1:]:
+    pdf.cell(number_col_width, row_height, header, align='C')
+pdf.set_text_color(0, 0, 0)  # Reset text color to black
+pdf.ln()
+
+# Table rows
+pdf.set_font('Arial', '', 9)  # Regular font for numbers
+for i, (index, row) in enumerate(df.iterrows()):
+    # Use the 'Item' column for the description
+    item_text = str(row['Item'])
+    if item_text.startswith("Less:") or item_text.startswith("Add:"):
+        item_text = "     " + item_text  # Indent by adding spaces
+    pdf.cell(item_col_width, row_height, item_text, align='L')
+    for value in row[1:]:  # Skip 'Item' column for the values
+        pdf.cell(number_col_width, row_height, str(value), align='C')
+    pdf.ln()
+
+# Define file path to save the PDF
+file_path = os.path.join(os.getcwd(), "equity_research_report.pdf")
+
+# Save the PDF
+pdf.output(file_path)
+
+print(f"PDF has been saved to {file_path}")
