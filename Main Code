@@ -296,4 +296,4 @@ plt.savefig('hmc_chart.png')
 plt.show()  # Display the plot
 print("Graph 3: HMC Share Price, Analyst Targets, and ASX200 Index")
 pdf.image("hmc_chart.png", x=10, y=20, w=190)
-pdf.output("output.pdf")
+pdf.output("HMC_Capital_Equity_Research_Report.pdf")
