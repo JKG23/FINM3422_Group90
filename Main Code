@@ -1,6 +1,15 @@
+# Install all required libraries
+    # pip install pandas
+    # pip install fpdf
+    # pip install datetime
+    # pip install requests
+    # pip install cairosvg
+    # pip install os
 import pandas as pd
 from fpdf import FPDF
 from datetime import date
+import requests
+import cairosvg
 import os
 
 # Create PDF
@@ -25,10 +34,6 @@ pdf.ln(2)  # Smaller line break between date and title
 pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)  # Title, left-aligned
 
 # To scrape the image off the website:
-
-import requests
-import cairosvg
-from fpdf import FPDF
 
 # Download SVG from HMC Capital's Website
 svg_url = "https://www.hmccapital.com.au/themes/bs5/images/HMC-Capital-logo.svg"
