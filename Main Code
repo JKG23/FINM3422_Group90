@@ -87,7 +87,7 @@ pdf.set_font('Arial', 'B', 12)
 pdf.cell(200, 10, 'DCF Output', ln=True)
 
 # Read the actual CSV file for DCF Output
-csv_file_path = "C:/Users/JKG66/OneDrive/4 FINM3422/Coding Assignment 1/DCF CSV.csv"  # Update the path to your actual CSV file
+csv_file_path = "DCF CSV.csv"
 df = pd.read_csv(csv_file_path)
 
 # Rename the first column to 'Item'
@@ -130,10 +130,6 @@ for i, (index, row) in enumerate(df.iterrows()):
     for value in row[1:]:  # Skip 'Item' column for the values
         pdf.cell(number_col_width, row_height, str(value), align='C')
     pdf.ln()
-
-
-# Add an image
-pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
 
 # Define file path to save the PDF
 file_path = os.path.join(os.getcwd(), "equity_research_report.pdf")
