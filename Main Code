@@ -87,7 +87,7 @@ pdf.set_font('Arial', 'B', 12)
 pdf.cell(200, 10, 'DCF Output', ln=True)
 
 # Read the actual CSV file for DCF Output
-csv_file_path = "C:/Users/JKG66/OneDrive/4 FINM3422/Coding Assignment 1/DCF CSV.csv"  # Update the path to your actual CSV file
+csv_file_path = "DCF CSV.csv"
 df = pd.read_csv(csv_file_path)
 
 # Rename the first column to 'Item'
