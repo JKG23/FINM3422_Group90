@@ -300,5 +300,4 @@ plt.show()
 Image.open("hmc_chart.png").convert("RGB").save("hmc_chart.jpg")
 print("Chart created and saved as hmc_chart.jpg")
 
-# Save the PDF
-pdf.output("HMC Capital.pdf")
+
