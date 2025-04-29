@@ -45,10 +45,7 @@ if response.status_code == 200:
     cairosvg.svg2png(url="HMC_Capital_logo.svg", write_to="HMC_Capital_logo.png")
 
     # Step 3: Add to main PDF file
-    pdf = FPDF()
-    pdf.add_page()
     pdf.image("HMC_Capital_logo.png", x=125, y=10, w=75)
-    pdf.output("output.pdf")
 
     print("PDF created with converted SVG logo!")
 else:
@@ -296,8 +293,7 @@ plt.tight_layout()
 
 #Saving chart
 plt.savefig('hmc_chart.png')
-plt.show()
-Image.open("hmc_chart.png").convert("RGB").save("hmc_chart.jpg")
-print("Chart created and saved as hmc_chart.jpg")
-
-
+plt.show()  # Display the plot
+print("Graph 3: HMC Share Price, Analyst Targets, and ASX200 Index")
+pdf.image("hmc_chart.png", x=10, y=20, w=190)
+pdf.output("output.pdf")
