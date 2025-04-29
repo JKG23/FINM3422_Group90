@@ -1,0 +1,13 @@
+,2025E,2026E,2027E,2028E,2029E
+EBITDA,433,344,390,394,473
+Less: Depreciation and Amortisation,109,111,121,52,51
+EBIT,323,233,269,341,422
+Less: Tax on EBIT,-97,-70,-81,-102,-127
+NOPAT,226,163,188,239,295
+Add: Depreciation and Amortisation,109,111,121,52,51
+Less: Capital Expenditure,0,0,0,0,0
+Less: Change in Working Capital,-230,-128,-140,-94,-135
+Unlevered Free Cash Flow,105,145,170,197,211
+Date For Discounting Cash Flows,45838,46203,46568,46934,47299
+Years Away From Present,0,1,2,3,4
+Discounted Free Cash Flow,104,133,145,156,156
