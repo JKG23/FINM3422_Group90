@@ -1,5 +1,7 @@
 #libraries
 import numpy as np
+import yfinance as yf   
+import pandas as pd       
 
 #ratio function, returns None if either value missing or denominator is zero
 def get_ratio(numerator, denominator):
@@ -48,3 +50,39 @@ def format_percentage(value):
         return f"{value * 100:.2f}%"
     except (ValueError, TypeError):
         return None
+# Data
+ticker = "HMC.AX"
+stock = yf.Ticker(ticker)
+info = stock.info
+
+# Fetch ratios
+price = info.get("currentPrice")
+eps = info.get("trailingEps")
+forward_eps = info.get("forwardEps")
+book_value = info.get("bookValue")
+dividend_per_share = info.get("dividendRate")
+market_cap = info.get("marketCap")
+beta = info.get("beta")
+revenue_growth = info.get("revenueGrowth")
+roe = info.get("returnOnEquity")
+debt_to_equity = info.get("debtToEquity")
+current_ratio = info.get("currentRatio")
+quick_ratio = info.get("quickRatio")
+
+# Calculate Ratios
+ratios = {
+    "P/E Ratio": pe_ratio(price, eps),
+    "Forward P/E Ratio": forward_pe(price, forward_eps),
+    "Price to Book": price_to_book(price, book_value),
+    "Dividend Yield (%)": dividend_yield(dividend_per_share, price),
+    "Market Capitalisation": market_cap,
+    "Beta": beta,
+    "Revenue Growth": revenue_growth,
+    "ROE": roe,
+    "Debt to Equity": debt_to_equity,
+    "Current Ratio": current_ratio,
+    "Quick Ratio": quick_ratio
+}
+
+# Table with all ratios
+df_ratios = pd.DataFrame(ratios.items(), columns=["Metric", "Value"])
