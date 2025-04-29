@@ -131,6 +131,34 @@ for i, (index, row) in enumerate(df.iterrows()):
         pdf.cell(number_col_width, row_height, str(value), align='C')
     pdf.ln()
 
+# Add Page
+pdf.add_page()
+
+#Key Ratios Table
+# Set position to bottom-left corner (e.g., 10 mm from left, 230 mm from top)
+pdf.set_xy(10, 180)  # Adjust Y as needed depending on table height
+
+# Table title
+pdf.set_font('Arial', 'B', 12)
+pdf.cell(100, 10, 'Financial Ratios', ln=True)
+
+# Table header
+pdf.set_font('Arial', 'B', 9)
+pdf.set_fill_color(202, 164, 94)
+pdf.set_text_color(255, 255, 255)
+pdf.cell(50, 6, 'Metric', border=1, fill=True)
+pdf.cell(50, 6, 'Value', border=1, fill=True)
+pdf.ln()
+
+# Table rows
+pdf.set_font('Arial', '', 9)
+pdf.set_text_color(0, 0, 0)
+for index, row in thingy2.df_ratios.iterrows():
+    metric = str(row['Metric'])
+    value = str(row['Value'])
+    pdf.cell(50, 6, metric, border=1)
+    pdf.cell(50, 6, value, border=1)
+    pdf.ln()
 
 # Add an image
 pdf.image("HMC_logo.jpg", x=10, y=10, w=100)
