@@ -32,8 +32,6 @@ pdf.cell(200, 10, date.today().strftime("%d %B %Y"), ln=True)
 pdf.set_font('Arial', 'B', 16)
 pdf.ln(2)
 pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)
-pdf.ln(2)
-pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)
 
 # Download and embed the HMC Capital logo into the PDF
 svg_url = "https://www.hmccapital.com.au/themes/bs5/images/HMC-Capital-logo.svg"
