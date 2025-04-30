@@ -167,50 +167,50 @@ price_targets['Date'] = pd.to_datetime(price_targets['Date'])
 
 # Create the first chart: HMC Share Price and Analyst Price Targets
 fig1, ax1 = plt.subplots(figsize=(8, 6))
-ax1.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')
-ax1.plot(price_targets['Date'], price_targets['Target Price'], linestyle='--', marker='o', color='black', label='Analyst Price Targets')
-ax1.set_xlabel('Date')
-ax1.set_ylabel('HMC Price (AUD)', color='blue')
-ax1.tick_params(axis='y', labelcolor='blue')
-ax1.set_title('HMC Share Price and Analyst Targets', pad=20)
-ax1.legend(loc='upper left')
-ax1.grid(True)
-ax1.xaxis.set_major_locator(plt.MaxNLocator(6))
-graph1_path = 'hmc_price_targets_chart.png'
-plt.savefig(graph1_path)
-plt.close()
+ax1.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')  # Plot HMC share price
+ax1.plot(price_targets['Date'], price_targets['Target Price'], linestyle='--', marker='o', color='black', label='Analyst Price Targets')  # Overlay analyst price targets
+ax1.set_xlabel('Date')  # Label for x-axis
+ax1.set_ylabel('HMC Price (AUD)', color='blue')  # Label for y-axis with color matching the line
+ax1.tick_params(axis='y', labelcolor='blue')  # Match y-axis tick color to the line
+ax1.set_title('HMC Share Price and Analyst Targets', pad=20)  # Add a title with padding
+ax1.legend(loc='upper left')  # Place legend in the upper left corner
+ax1.grid(True)  # Enable grid for better readability
+ax1.xaxis.set_major_locator(plt.MaxNLocator(6))  # Limit the number of x-axis ticks for clarity
+graph1_path = 'hmc_price_targets_chart.png'  # Path to save the chart
+plt.savefig(graph1_path)  # Save the chart as a PNG file
+plt.close()  # Close the figure to free up memory
 
 # Create the second chart: HMC Share Price vs ASX200 Index
 fig2, ax2 = plt.subplots(figsize=(8, 6))
-ax2.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')
-ax2.set_xlabel('Date')
-ax2.set_ylabel('HMC Price (AUD)', color='blue')
-ax2.tick_params(axis='y', labelcolor='blue')
+ax2.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')  # Plot HMC share price
+ax2.set_xlabel('Date')  # Label for x-axis
+ax2.set_ylabel('HMC Price (AUD)', color='blue')  # Label for left y-axis
+ax2.tick_params(axis='y', labelcolor='blue')  # Match left y-axis tick color to the line
 
-# Add secondary y-axis for ASX200 Index
+# Add a secondary y-axis for ASX200 Index
 ax3 = ax2.twinx()
-ax3.plot(asx200.index, asx200['Close'], label='ASX200 Index', color='grey', linestyle='--')
-ax3.set_ylabel('ASX200 Index Level', color='grey')
-ax3.tick_params(axis='y', labelcolor='grey')
+ax3.plot(asx200.index, asx200['Close'], label='ASX200 Index', color='grey', linestyle='--')  # Plot ASX200 index
+ax3.set_ylabel('ASX200 Index Level', color='grey')  # Label for right y-axis
+ax3.tick_params(axis='y', labelcolor='grey')  # Match right y-axis tick color to the line
 
-# Add title and combined legend
-fig2.suptitle('HMC Share Price and ASX200 Index', y=0.95)
-lines1, labels1 = ax2.get_legend_handles_labels()
-lines2, labels2 = ax3.get_legend_handles_labels()
-ax2.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
-ax2.grid(True)
-ax2.xaxis.set_major_locator(plt.MaxNLocator(6))
-graph2_path = 'hmc_asx200_chart.png'
-plt.savefig(graph2_path)
-plt.close()
+# Add a combined title and legend for both axes
+fig2.suptitle('HMC Share Price and ASX200 Index', y=0.95)  # Title with adjusted vertical position
+lines1, labels1 = ax2.get_legend_handles_labels()  # Get legend details for the first axis
+lines2, labels2 = ax3.get_legend_handles_labels()  # Get legend details for the second axis
+ax2.legend(lines1 + lines2, labels1 + labels2, loc='upper left')  # Combine legends and place in the upper left corner
+ax2.grid(True)  # Enable grid for better readability
+ax2.xaxis.set_major_locator(plt.MaxNLocator(6))  # Limit the number of x-axis ticks for clarity
+graph2_path = 'hmc_asx200_chart.png'  # Path to save the chart
+plt.savefig(graph2_path)  # Save the chart as a PNG file
+plt.close()  # Close the figure to free up memory
 
-# Embed charts into the PDF
-pdf.image(graph1_path, x=10, y=30, w=95)
-pdf.image(graph2_path, x=110, y=30, w=95)
+# Embed the generated charts into the PDF
+pdf.image(graph1_path, x=10, y=30, w=95)  # Embed the first chart on the left side of the page
+pdf.image(graph2_path, x=110, y=30, w=95)  # Embed the second chart on the right side of the page
 
-# Add small headers for branding
+# Add small headers in the corners of the page for branding and context
 pdf.set_font('Arial', '', 9)
-pdf.set_xy(10, 10)
-pdf.cell(0, 5, 'FINM3422 Group 90', ln=False)
-pdf.set_xy(200 - pdf.get_string_width('HMC Capital Equity Research Report') - 10, 10)
-pdf.cell(0, 5, 'HMC Capital Equity Research Report', ln=False)
+pdf.set_xy(10, 10)  # Position for the left header
+pdf.cell(0, 5, 'FINM3422 Group 90', ln=False)  # Add group name
+pdf.set_xy(200 - pdf.get_string_width('HMC Capital Equity Research Report') - 10, 10)  # Position for the right header
+pdf.cell(0, 5, 'HMC Capital Equity Research Report', ln=False)  # Add report title
