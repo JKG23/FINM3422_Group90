@@ -65,7 +65,6 @@ pdf.cell(200, 10, 'Company Overview', ln=True)
 pdf.set_font('Arial', '', 9)
 company_overview = """
 HMC Capital Limited (ASX: HMC) is a leading Australian alternative asset manager, specializing in high-conviction real asset strategies. Since rebranding from Home Consortium in 2021, it has rapidly expanded its funds under management to over $18.5Bn, focusing on real estate, private equity, private credit, energy transition, and digital infrastructure.
-HMC Capital Limited (ASX: HMC) is a leading Australian alternative asset manager, specializing in high-conviction real asset strategies. Since rebranding from Home Consortium in 2021, it has rapidly expanded its funds under management to over $18.5Bn, focusing on real estate, private equity, private credit, energy transition, and digital infrastructure.
 """
 pdf.multi_cell(95, 5, company_overview)
 
@@ -89,11 +88,9 @@ GICS Sector: Financials
 """
 pdf.set_x(105)
 pdf.multi_cell(95, 5, price_targets, align='R')
-pdf.set_x(105)
-pdf.multi_cell(95, 5, price_targets, align='R')
 
 # Add an "Industry Overview" section to provide context about the sector
-pdf.ln(10)
+pdf.ln(8)  # Adjusted spacing to move the section slightly higher
 pdf.set_font('Arial', 'B', 16)
 pdf.cell(200, 10, 'Industry Overview', ln=True)
 
@@ -101,12 +98,11 @@ pdf.cell(200, 10, 'Industry Overview', ln=True)
 pdf.set_font('Arial', '', 9)
 industry_overview = """
 The alternative asset management industry has grown rapidly in recent years, driven by rising demand for diversification, higher returns, and protection against market swings. This sector, which includes real estate, private equity, infrastructure, and energy transition, is popular for its stable returns and long-term growth. Institutional investors, like pension funds and sovereign wealth funds, are increasingly shifting capital towards alternatives as traditional assets offer lower yields. ESG investing is also reshaping the industry, with firms incorporating sustainability into their strategies. Despite challenges like market volatility and competition, the industry offers strong growth opportunities, especially for firms focusing on emerging areas like digital infrastructure and renewable energy.
-The alternative asset management industry has grown rapidly in recent years, driven by rising demand for diversification, higher returns, and protection against market swings. This sector, which includes real estate, private equity, infrastructure, and energy transition, is popular for its stable returns and long-term growth. Institutional investors, like pension funds and sovereign wealth funds, are increasingly shifting capital towards alternatives as traditional assets offer lower yields. ESG investing is also reshaping the industry, with firms incorporating sustainability into their strategies. Despite challenges like market volatility and competition, the industry offers strong growth opportunities, especially for firms focusing on emerging areas like digital infrastructure and renewable energy.
 """
 pdf.multi_cell(0, 5, industry_overview)
 
 # Add a "DCF Output" section to present financial projections
-pdf.ln(10)
+pdf.ln(4)  # Adjusted spacing to move the section slightly higher
 pdf.set_font('Arial', 'B', 16)
 pdf.cell(200, 10, 'DCF Output', ln=True)
 
@@ -137,8 +133,7 @@ pdf.set_text_color(202, 164, 94)  # Highlight headers with a gold-like color
 for header in headers[1:]:
     pdf.cell(number_col_width, row_height, header, align='R')
 pdf.set_text_color(0, 0, 0)
-    pdf.cell(number_col_width, row_height, header, align='R')
-pdf.set_text_color(0, 0, 0)
+pdf.ln()
 pdf.ln()
 
 # Populate the table with data from the CSV file
@@ -297,7 +292,7 @@ for index, row in functions.df_ratios.iterrows():
 # Add a "Recommendation" section aligned with the "Recent Headlines" heading
 pdf.set_xy(110, 120)  # Position to the right of the page
 pdf.set_font('Arial', 'B', 16)
-pdf.cell(90, 10, 'Reccomendations', ln=True)
+pdf.cell(90, 10, 'Recomendations', ln=True)
 
 # Add the investment overview text
 pdf.set_font('Arial', '', 9)
