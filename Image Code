@@ -13,12 +13,6 @@ if response.status_code == 200:
     # Step 2: Convert SVG to PNG in order to add to the main PDF file
     cairosvg.svg2png(url="HMC_Capital_logo.svg", write_to="HMC_Capital_logo.png")
 
-    # Step 3: Add to main PDF file
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.image("HMC_Capital_logo.png", x=10, y=10, w=75)
-    pdf.output("HMC_Report.pdf")
-
     print("PDF created with converted SVG logo!")
 else:
     print("Failed to download SVG logo.")
