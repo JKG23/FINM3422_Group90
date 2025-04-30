@@ -11,82 +11,69 @@ import functions
 from PIL import Image
 from bs4 import BeautifulSoup
 
-
-
-# Create PDF
+# Initialize the PDF object
 pdf = FPDF(orientation='P', unit='mm', format='A4')
 
-# Set font
+# Set up the font and add the first page
 pdf.set_font('Arial',)
 pdf.add_page()
 
-# Add a colored box behind the first three lines of text
-pdf.set_fill_color(202, 164, 94)  # Set fill color to hex #CAA45E
-pdf.rect(0, 0, 210, 45, 'F')  # Draw a filled rectangle (full page width, height to cover the first three lines)
+# Add a colored header background
+pdf.set_fill_color(202, 164, 94)  # Gold-like color
+pdf.rect(0, 0, 210, 45, 'F')  # Rectangle spans the width of the page
 
-# Set font for date (subtitle style text) and change text color to white
-pdf.set_text_color(255, 255, 255)  # Set text color to white
-pdf.set_font('Arial', 'I', 9)  # Reduced font size for date
-pdf.cell(200, 10, date.today().strftime("%d %B %Y"), ln=True)  # Date at the top, left-aligned
+# Add the current date in white text
+pdf.set_text_color(255, 255, 255)
+pdf.set_font('Arial', 'I', 9)
+pdf.cell(200, 10, date.today().strftime("%d %B %Y"), ln=True)
 
-# Set font for title (big title style)
+# Add the report title
 pdf.set_font('Arial', 'B', 16)
-pdf.ln(2)  # Smaller line break between date and title
-pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)  # Title, left-aligned
+pdf.ln(2)
+pdf.cell(200, 10, 'HMC Capital Equity Research Report', ln=True)
 
-# To scrape the image off the website:
-
-# Download SVG from HMC Capital's Website
+# Download and embed the HMC Capital logo
 svg_url = "https://www.hmccapital.com.au/themes/bs5/images/HMC-Capital-logo.svg"
 response = requests.get(svg_url)
 
 if response.status_code == 200:
     with open("HMC_Capital_logo.svg", "wb") as f:
         f.write(response.content)
-
-    # Step 2: Convert SVG to PNG in order to add to the main PDF file
     cairosvg.svg2png(url="HMC_Capital_logo.svg", write_to="HMC_Capital_logo.png")
-
-    # Step 3: Add to main PDF file
     pdf.image("HMC_Capital_logo.png", x=125, y=10, w=75)
-
     print("PDF created with converted SVG logo!")
 else:
     print("Failed to download SVG logo.")
 
-# Set font for authors (normal text)
-pdf.set_font('Arial', '', 9)  # Reduced font size for authors
-pdf.ln(2)  # Smaller line break between title and authors
-pdf.cell(200, 10, 'by Flynn Hubbard, Jay Gills, Kirrtanya Tandon and Joshua Gray', ln=True)  # Authors, left-aligned
+# Add authors' names
+pdf.set_font('Arial', '', 9)
+pdf.ln(2)
+pdf.cell(200, 10, 'By Flynn Hubbard, Jay Gills, Kirrtanya Tandon and Joshua Gray', ln=True)
 
-# Reset text color to black for subsequent sections
+# Reset text color to black for the main content
 pdf.set_text_color(0, 0, 0)
 
-# Add section title for "Company Overview"
-pdf.ln(6)  # Reduced line break between title and body
+# Add "Company Overview" section
+pdf.ln(6)
 pdf.set_font('Arial', 'B', 16)
 pdf.cell(200, 10, 'Company Overview', ln=True)
 
-# Set font for the body text (smaller size for compactness)
+# Add the company description
 pdf.set_font('Arial', '', 9)
 company_overview = """
-HMC Capital Limited (ASX: HMC) is a diversified Australian alternative asset manager specializing in high-conviction, scalable real asset strategies. Since its rebranding from Home Consortium in 2021, HMC has rapidly expanded its funds under management (FUM) and diversified its investment platforms across real estate, private equity, private credit, energy transition, and digital infrastructure.
+HMC Capital Limited (ASX: HMC) is a leading Australian alternative asset manager, specializing in high-conviction real asset strategies. Since rebranding from Home Consortium in 2021, it has rapidly expanded its funds under management to over $18.5Bn, focusing on real estate, private equity, private credit, energy transition, and digital infrastructure.
 """
-pdf.multi_cell(95, 5, company_overview)  # Width of 95 to keep the text from stretching across the whole page
+pdf.multi_cell(95, 5, company_overview)
 
-# Move to the right side of the page, inline with the "Company Overview" section
-pdf.set_xy(110, pdf.get_y() - 30)  # Adjust x and y coordinates to align with the "Company Overview" section
+# Align the "Analyst Price Targets" section to the right
+pdf.set_xy(110, pdf.get_y() - 30)
+pdf.set_font('Arial', 'B', 16)
+pdf.set_xy(105, pdf.get_y() - 10)
+pdf.set_text_color(202, 164, 94)
+pdf.cell(95, 5, 'BUY', ln=True, align='R')
+pdf.set_text_color(0, 0, 0)
 
-# Set font for "Analyst Price Targets"
-pdf.set_font('Arial', 'B', 12)
-
-# Move "Analyst Price Targets" slightly higher
-pdf.set_xy(105, pdf.get_y() - 17)  # Adjust x and y coordinates for consistent margin
-pdf.set_text_color(202, 164, 94)  # Set text color to hex #CAA45E
-pdf.cell(95, 5, 'BUY', ln=True, align='R')  # Align right
-pdf.set_text_color(0, 0, 0)  # Reset text color to black
-
-# Set font for price targets (normal text)
+# Add price target details
 pdf.set_font('Arial', '', 9)
 price_targets = """
 Stock Code: ASX:HMC
@@ -96,173 +83,134 @@ Upside: 92.31%
 Dividend yield: 2.56%
 GICS Sector: Financials
 """
-pdf.set_x(105)  # Adjust x coordinate for consistent margin
-pdf.multi_cell(95, 5, price_targets, align='R')  # Align text to the right
+pdf.set_x(105)
+pdf.multi_cell(95, 5, price_targets, align='R')
 
-# Add section title for "Industry Overview"
-pdf.ln(10)  # Reduced line break between sections
+# Add "Industry Overview" section
+pdf.ln(10)
 pdf.set_font('Arial', 'B', 16)
 pdf.cell(200, 10, 'Industry Overview', ln=True)
 
-# Set font for the body text
+# Add industry description
 pdf.set_font('Arial', '', 9)
 industry_overview = """
-The alternative asset management industry has experienced significant growth in recent years, driven by increasing investor demand for diversification, higher returns, and protection against market volatility. This sector includes investments in real estate, private equity, infrastructure, and energy transition, all of which are seen as attractive due to their stable returns and long-term growth potential. Institutional investors, particularly pension funds and sovereign wealth funds, are shifting more capital towards alternatives as traditional asset classes offer lower yields. Furthermore, the rise of ESG investing is reshaping the industry, with asset managers integrating sustainability into their portfolios. Despite facing challenges such as market volatility and high competition, the alternative asset management industry remains robust, offering considerable opportunities for growth, particularly for firms with expertise in emerging sectors like digital infrastructure and renewable energy.
+The alternative asset management industry has grown rapidly in recent years, driven by rising demand for diversification, higher returns, and protection against market swings. This sector, which includes real estate, private equity, infrastructure, and energy transition, is popular for its stable returns and long-term growth. Institutional investors, like pension funds and sovereign wealth funds, are increasingly shifting capital towards alternatives as traditional assets offer lower yields. ESG investing is also reshaping the industry, with firms incorporating sustainability into their strategies. Despite challenges like market volatility and competition, the industry offers strong growth opportunities, especially for firms focusing on emerging areas like digital infrastructure and renewable energy.
 """
-pdf.multi_cell(0, 5, industry_overview)  # Adjusted line spacing
+pdf.multi_cell(0, 5, industry_overview)
 
-# DCF Output Section (Referencing CSV)
-pdf.ln(10)  # Reduced line break between sections
-pdf.set_font('Arial', 'B', 12)
+# Add "DCF Output" section and read data from a CSV file
+pdf.ln(10)
+pdf.set_font('Arial', 'B', 16)
 pdf.cell(200, 10, 'DCF Output', ln=True)
 
-# Read the actual CSV file for DCF Output
 csv_file_path = "DCF CSV.csv"
 df = pd.read_csv(csv_file_path)
-
-# Rename the first column to 'Item'
 df.rename(columns={'Unnamed: 0': 'Item'}, inplace=True)
 
-# Table format for DCF Output
+# Format and add the DCF table
 pdf.set_font('Arial', '', 9)
-
-# Table header
 headers = ['AUD$m'] + [f'{year}E' for year in range(2025, 2030)]
 pdf.ln(2)
 
-# Adjust column widths
-page_width = 200  # Total page width
-left_margin = 10  # Default left margin
-right_margin = 10  # Add a right margin equal to the left margin
-usable_width = page_width - left_margin - right_margin  # Usable width for the table
-item_col_width = 70  # Wider column for 'Item'
-number_col_width = (usable_width - item_col_width) / (len(headers) - 1)  # Distribute remaining width among number columns
-row_height = 4  # Reduced row height for compactness
+page_width = 200
+left_margin = 10
+right_margin = 10
+usable_width = page_width - left_margin - right_margin
+item_col_width = 70
+number_col_width = (usable_width - item_col_width) / (len(headers) - 1)
+row_height = 4
 
-# Table header
-pdf.set_font('Arial', 'I', 9)  # Italic font for headers
-pdf.cell(item_col_width, row_height, headers[0], align='L')  # First heading with "AUD$m"
-pdf.set_font('Arial', 'B', 9)  # Bold font for the rest of the headers
-pdf.set_text_color(202, 164, 94)  # Set text color to hex #CAA45E
+pdf.set_font('Arial', 'I', 9)
+pdf.cell(item_col_width, row_height, headers[0], align='L')
+pdf.set_font('Arial', 'B', 9)
+pdf.set_text_color(202, 164, 94)
 for header in headers[1:]:
-    pdf.cell(number_col_width, row_height, header, align='C')
-pdf.set_text_color(0, 0, 0)  # Reset text color to black
+    pdf.cell(number_col_width, row_height, header, align='R')
+pdf.set_text_color(0, 0, 0)
 pdf.ln()
 
-# Table rows
-pdf.set_font('Arial', '', 9)  # Regular font for numbers
+pdf.set_font('Arial', '', 9)
 for i, (index, row) in enumerate(df.iterrows()):
-    # Use the 'Item' column for the description
     item_text = str(row['Item'])
     if item_text.startswith("Less:") or item_text.startswith("Add:"):
-        item_text = "     " + item_text  # Indent by adding spaces
+        item_text = "     " + item_text
     pdf.cell(item_col_width, row_height, item_text, align='L')
-    for value in row[1:]:  # Skip 'Item' column for the values
-        pdf.cell(number_col_width, row_height, str(value), align='C')
+    for col_index, value in enumerate(row[1:]):
+        if pd.isna(value):
+            cell_value = ""
+        else:
+            if item_text.lower() == "shares outstanding":
+                cell_value = f"{int(value):,}m"
+            elif item_text.lower() == "share price":
+                cell_value = f"${float(value):.2f}"
+            else:
+                cell_value = f"{int(value):,}"
+        pdf.cell(number_col_width, row_height + 0.5, cell_value, align='R')
     pdf.ln()
 
-# Add Page
+# Add a new page for charts
 pdf.add_page()
 
-# Key Ratios Table
-# Set position to bottom-left corner (e.g., 10 mm from left, 230 mm from top)
-pdf.set_xy(10, 180)  # Adjust Y as needed depending on table height
+# Add "Stock Price Performance" heading
+pdf.set_font('Arial', 'B', 16)
+pdf.set_xy(10, 20)
+pdf.cell(200, 10, 'Stock Price Performance', ln=True)
 
-# Table title
-pdf.set_font('Arial', 'B', 12)
-pdf.cell(100, 10, 'Financial Ratios', ln=True)
-
-# Table header
-pdf.set_font('Arial', 'B', 9)
-pdf.set_fill_color(202, 164, 94)
-pdf.set_text_color(255, 255, 255)
-pdf.cell(50, 6, 'Metric', border=1, fill=True)
-pdf.cell(50, 6, 'Value', border=1, fill=True)
-pdf.ln()
-
-# Table rows
-pdf.set_font('Arial', '', 9)
-pdf.set_text_color(0, 0, 0)
-for index, row in functions.df_ratios.iterrows():
-    metric = str(row['Metric'])
-    value = str(row['Value'])
-    pdf.cell(50, 6, metric, border=1)
-    pdf.cell(50, 6, value, border=1)
-    pdf.ln()
-
-# Extracting historical data from yfinance
-# Defining tickers for HMC Capital Limited and S&P/ASX200
+# Download historical stock data and create charts
 ticker_hmc = 'HMC.AX'
 ticker_asx200 = '^AXJO'
-
-# Downloading historical data
 hmc = yf.download(ticker_hmc, start='2021-12-30', end='2025-04-27')
 asx200 = yf.download(ticker_asx200, start='2021-12-30', end='2025-04-27')
 
-# Reading analyst price targets
 price_targets = pd.read_csv('price_targets.csv')
 price_targets['Date'] = pd.to_datetime(price_targets['Date'])
 
-# Combined Graph: HMC Share Price, Analyst Targets, and ASX200 Index
-fig, ax1 = plt.subplots(figsize=(14, 7))
-
-# Plotting HMC share price
+# Create the first chart: HMC Share Price and Analyst Price Targets
+fig1, ax1 = plt.subplots(figsize=(8, 6))
 ax1.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')
-# Plotting analyst price targets
 ax1.plot(price_targets['Date'], price_targets['Target Price'], linestyle='--', marker='o', color='black', label='Analyst Price Targets')
-
-# Primary y-axis for HMC
 ax1.set_xlabel('Date')
 ax1.set_ylabel('HMC Price (AUD)', color='blue')
 ax1.tick_params(axis='y', labelcolor='blue')
+ax1.set_title('HMC Share Price and Analyst Targets', pad=20)
+ax1.legend(loc='upper left')
+ax1.grid(True)
+ax1.xaxis.set_major_locator(plt.MaxNLocator(6))
+graph1_path = 'hmc_price_targets_chart.png'
+plt.savefig(graph1_path)
+plt.close()
 
-# Secondary y-axis for ASX200
-ax2 = ax1.twinx()
-ax2.plot(asx200.index, asx200['Close'], label='ASX200 Index', color='grey', linestyle='--')
-ax2.set_ylabel('ASX200 Index Level', color='grey')
-ax2.tick_params(axis='y', labelcolor='grey')
+# Create the second chart: HMC Share Price vs ASX200 Index
+fig2, ax2 = plt.subplots(figsize=(8, 6))
+ax2.plot(hmc.index, hmc['Close'], label='HMC Share Price', color='blue')
+ax2.set_xlabel('Date')
+ax2.set_ylabel('HMC Price (AUD)', color='blue')
+ax2.tick_params(axis='y', labelcolor='blue')
 
-# Adding title and grid
-fig.suptitle('HMC Share Price, Analyst Targets, and ASX200 Index', fontsize=16)
+# Add secondary y-axis for ASX200 Index
+ax3 = ax2.twinx()
+ax3.plot(asx200.index, asx200['Close'], label='ASX200 Index', color='grey', linestyle='--')
+ax3.set_ylabel('ASX200 Index Level', color='grey')
+ax3.tick_params(axis='y', labelcolor='grey')
 
-# Combining legends
-lines1, labels1 = ax1.get_legend_handles_labels()
-lines2, labels2 = ax2.get_legend_handles_labels()
-ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+# Add title and combined legend
+fig2.suptitle('HMC Share Price and ASX200 Index', y=0.95)
+lines1, labels1 = ax2.get_legend_handles_labels()
+lines2, labels2 = ax3.get_legend_handles_labels()
+ax2.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+ax2.grid(True)
+ax2.xaxis.set_major_locator(plt.MaxNLocator(6))
+graph2_path = 'hmc_asx200_chart.png'
+plt.savefig(graph2_path)
+plt.close()
 
-plt.grid(True)
-plt.tight_layout()
+# Embed charts into the PDF
+pdf.image(graph1_path, x=10, y=30, w=95)
+pdf.image(graph2_path, x=110, y=30, w=95)
 
-# Saving chart
-chart_path = 'hmc_combined_chart.png'
-plt.savefig(chart_path)
-plt.close()  # Close the plot to free memory
-
-# Adding the chart to the PDF
-pdf.image(chart_path, x=10, y=20, w=190)
-
-# Reading in AFR URL for Cleanaway Website
-
-AFR = 'https://www.afr.com/company/asx/hmc'
-
-RawHTML = requests.get(AFR)
-
-# Parse the raw HTML using BeautifulSoup
-
-parse = BeautifulSoup(RawHTML.content, 'html.parser')
-
-
-# Find recent AFR headlines by filtering to publication-specific format
-
-headlines = parse.find_all('h3', class_='-_73414cb90844eda9-headline')
-
-
-# Pull and print the most recent 10 headlines
-
-for headline in headlines[:10]:
-
-    print(headline.get_text(strip=True))
-
-pdf.output("HMC_Capital_Equity_Research_Report.pdf")
-
-
+# Add small headers for branding
+pdf.set_font('Arial', '', 9)
+pdf.set_xy(10, 10)
+pdf.cell(0, 5, 'FINM3422 Group 90', ln=False)
+pdf.set_xy(200 - pdf.get_string_width('HMC Capital Equity Research Report') - 10, 10)
+pdf.cell(0, 5, 'HMC Capital Equity Research Report', ln=False)
